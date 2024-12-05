@@ -134,8 +134,8 @@ function addButton(parent, text, onClick) {
 function createLightPanel() {
   const panel = document.createElement("div");
   panel.style.position = "absolute";
-  panel.style.top = "320px";
-  panel.style.right = "10px";
+  panel.style.top = "110px";
+  panel.style.left = "10px";
   panel.style.zIndex = 1000;
   panel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
   panel.style.padding = "10px";
