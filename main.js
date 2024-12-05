@@ -89,6 +89,7 @@ inputElement.addEventListener("change", (event) => {
 
 
 
+
 function createControlPanel() {
   const panel = document.createElement("div");
   panel.style.position = "absolute";
@@ -113,6 +114,7 @@ function createControlPanel() {
 
   return panel;
 }
+
 
 function addButton(parent, text, onClick) {
   const button = document.createElement("button");
@@ -163,36 +165,6 @@ function createLightPanel() {
 }
 
 
-const footer = document.createElement("footer");
-footer.style.position = "absolute";
-footer.style.bottom = "0";
-footer.style.width = "100%";
-footer.style.textAlign = "center";
-footer.style.padding = "20px";
-footer.style.cursor = "pointer";
-footer.style.textDecoration = "none";
-footer.textContent = "sudo-3d.vercel.app";
-
-function updateFooterTextColor() {
-  const bodyBackgroundColor = window.getComputedStyle(document.body).backgroundColor;
-  const isWhiteBackground = bodyBackgroundColor === "rgb(255, 255, 255)";
-  footer.style.color = isWhiteBackground ? "black" : "white";
-}
-
-footer.addEventListener("click", () => {
-  window.location.href = "https://sudo-3d.vercel.app";
-});
-
-document.body.appendChild(footer);
-
-
-function toggleBackgroundColor() {
-  isBlackBackground = !isBlackBackground;
-  document.body.style.backgroundColor = isBlackBackground ? "black" : "white";
-  renderer.setClearColor(isBlackBackground ? 0x000000 : 0xffffff, 1);
-  updateFooterTextColor();
-}
-
 const toggleBackgroundButton = document.createElement("button");
 toggleBackgroundButton.textContent = "Background";
 toggleBackgroundButton.style.position = "absolute";
@@ -203,6 +175,36 @@ toggleBackgroundButton.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
 toggleBackgroundButton.style.color = "#fff";
 toggleBackgroundButton.style.padding = "10px";
 document.body.appendChild(toggleBackgroundButton);
+
+
+const footer = document.createElement("footer");
+footer.style.position = "absolute";
+footer.style.bottom = "0";
+footer.style.width = "100%";
+footer.style.textAlign = "center";
+footer.style.padding = "20px";
+footer.style.cursor = "pointer";
+footer.style.textDecoration = "none";
+footer.textContent = "sudo-3d.vercel.app";
+footer.addEventListener("click", () => {
+  window.location.href = "https://sudo-3d.vercel.app";
+});
+document.body.appendChild(footer);
+
+
+function updateFooterTextColor() {
+  const bodyBackgroundColor = window.getComputedStyle(document.body).backgroundColor;
+  const isWhiteBackground = bodyBackgroundColor === "rgb(255, 255, 255)";
+  footer.style.color = isWhiteBackground ? "black" : "white";
+}
+
+
+function toggleBackgroundColor() {
+  isBlackBackground = !isBlackBackground;
+  document.body.style.backgroundColor = isBlackBackground ? "black" : "white";
+  renderer.setClearColor(isBlackBackground ? 0x000000 : 0xffffff, 1);
+  updateFooterTextColor();
+}
 
 let isBlackBackground = true;
 toggleBackgroundButton.addEventListener("click", () => {
@@ -222,6 +224,7 @@ function animate() {
 }
 
 animate();
+
 
 
 
