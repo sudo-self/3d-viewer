@@ -23,7 +23,6 @@ loader.load(
     scene.add(currentModel);
     modelUrl = "/max90.glb";
     modelFileSize = gltf.scene ? new Blob([gltf]).size : 0;
-    updateInfoPanel();
   },
   undefined,
   (error) => console.error("Error loading the model:", error),
@@ -79,7 +78,6 @@ inputElement.addEventListener("change", (event) => {
           scene.add(currentModel);
           modelUrl = url;
           modelFileSize = blob.size;
-          updateInfoPanel();
         },
         undefined,
         (error) => console.error("Error loading the model:", error),
@@ -88,6 +86,7 @@ inputElement.addEventListener("change", (event) => {
     reader.readAsArrayBuffer(file);
   }
 });
+
 
 
 function createControlPanel() {
@@ -164,38 +163,6 @@ function createLightPanel() {
 }
 
 
-function createInfoPanel() {
-  const panel = document.createElement("div");
-  panel.style.position = "absolute";
-  panel.style.top = "460px";
-  panel.style.right = "10px";
-  panel.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-  panel.style.padding = "20px";
-  panel.style.color = "white";
-  panel.style.borderRadius = "10px";
-  panel.style.whiteSpace = "pre-wrap";
-  panel.style.maxHeight = "70vh";
-  panel.style.overflowY = "auto";
-  panel.style.width = "300px";
-  document.body.appendChild(panel);
-  return panel;
-}
-
-function updateInfoPanel() {
-  if (currentModel) {
-    infoPanel.textContent = JSON.stringify(
-      {
-        url: modelUrl || "N/A",
-        position: currentModel.position.toArray(),
-        scale: currentModel.scale.toArray(),
-        rotation: currentModel.rotation.toArray(),
-      },
-      null,
-      2,
-    );
-  }
-}
-
 const footer = document.createElement("footer");
 footer.style.position = "absolute";
 footer.style.bottom = "0";
@@ -229,8 +196,8 @@ function toggleBackgroundColor() {
 const toggleBackgroundButton = document.createElement("button");
 toggleBackgroundButton.textContent = "Background";
 toggleBackgroundButton.style.position = "absolute";
-toggleBackgroundButton.style.top = "395px";
-toggleBackgroundButton.style.right = "10px";
+toggleBackgroundButton.style.top = "40px";
+toggleBackgroundButton.style.left = "10px";
 toggleBackgroundButton.style.zIndex = 1000;
 toggleBackgroundButton.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
 toggleBackgroundButton.style.color = "#fff";
@@ -246,17 +213,16 @@ updateFooterTextColor();
 
 const controlsPanel = createControlPanel();
 const lightPanel = createLightPanel();
-const infoPanel = createInfoPanel();
 
 
 function animate() {
   controls.update();
-  updateInfoPanel();
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
 
 animate();
+
 
 
 
