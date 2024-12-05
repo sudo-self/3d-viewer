@@ -6,4 +6,4 @@ cd 3d-viewer
 npx vite
 ```
 
-<img width="1440" alt="Screenshot 2024-12-05 at 04 36 53" src="https://github.com/user-attachments/assets/f95e4ff1-fb5b-4075-ad6b-f62013c625bb">
+<img width="1440" alt="Screenshot 2024-12-05 at 04 36 53" src="https://github.com/user-attachments/assets/7b58a125-11fd-4e83-b2a4-defd68a246a1">
