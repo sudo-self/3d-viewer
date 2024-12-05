@@ -14,15 +14,15 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const loader = new GLTFLoader();
 
+const loader = new GLTFLoader();
 let currentModel = null;
 let modelUrl = null;
 let modelFileSize = null;
 
 loader.load(
   "/max90.glb",
-  function (gltf) {
+  (gltf) => {
     currentModel = gltf.scene;
     currentModel.position.set(0, 0, 2);
     currentModel.rotation.y = Math.PI / 2;
@@ -32,10 +32,9 @@ loader.load(
     updateInfoPanel();
   },
   undefined,
-  function (error) {
-    console.error("Error loading the model:", error);
-  },
+  (error) => console.error("Error loading the model:", error),
 );
+
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(5, 5, 5);
@@ -43,9 +42,9 @@ scene.add(directionalLight);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.25;
-controls.screenSpacePanning = false;
+controls.dampingFactor = 0.50;
 camera.position.z = 5;
+
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -53,32 +52,35 @@ window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+
 const inputElement = document.createElement("input");
 inputElement.type = "file";
 inputElement.accept = ".glb";
 inputElement.style.position = "absolute";
-inputElement.style.top = "10px";
-inputElement.style.left = "10px";
+inputElement.style.top = "50px";
+inputElement.style.left = "45%";
+inputElement.style.padding = "10px";
+inputElement.style.border = "none";
+inputElement.style.borderRadius = "8px";
+inputElement.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+inputElement.style.color = "#fff";
+inputElement.style.cursor = "pointer";
 document.body.appendChild(inputElement);
 
-inputElement.addEventListener("change", function (event) {
+inputElement.addEventListener("change", (event) => {
   const file = event.target.files[0];
   if (file && file.name.endsWith(".glb")) {
     const reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = (e) => {
       const arrayBuffer = e.target.result;
-      const blob = new Blob([arrayBuffer], {
-        type: "application/octet-stream",
-      });
+      const blob = new Blob([arrayBuffer], { type: "application/octet-stream" });
       const url = URL.createObjectURL(blob);
 
-      if (currentModel) {
-        scene.remove(currentModel);
-      }
+      if (currentModel) scene.remove(currentModel);
 
       loader.load(
         url,
-        function (gltf) {
+        (gltf) => {
           currentModel = gltf.scene;
           currentModel.position.set(0, 0, 2);
           currentModel.rotation.y = Math.PI;
@@ -88,18 +90,13 @@ inputElement.addEventListener("change", function (event) {
           updateInfoPanel();
         },
         undefined,
-        function (error) {
-          console.error("Error loading the model:", error);
-        },
+        (error) => console.error("Error loading the model:", error),
       );
     };
     reader.readAsArrayBuffer(file);
   }
 });
 
-const controlsPanel = createControlPanel();
-const lightPanel = createLightPanel();
-const infoPanel = createInfoPanel();
 
 function createControlPanel() {
   const panel = document.createElement("div");
@@ -107,20 +104,13 @@ function createControlPanel() {
   panel.style.top = "10px";
   panel.style.right = "10px";
   panel.style.zIndex = 1000;
-  panel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
   panel.style.padding = "10px";
   panel.style.color = "#fff";
   document.body.appendChild(panel);
 
-  addButton(panel, "Rotate X", () => {
-    if (currentModel) currentModel.rotation.x += Math.PI / 2;
-  });
-  addButton(panel, "Rotate Y", () => {
-    if (currentModel) currentModel.rotation.y += Math.PI / 2;
-  });
-  addButton(panel, "Rotate Z", () => {
-    if (currentModel) currentModel.rotation.z += Math.PI / 2;
-  });
+  addButton(panel, "Rotate X", () => currentModel && (currentModel.rotation.x += Math.PI / 2));
+  addButton(panel, "Rotate Y", () => currentModel && (currentModel.rotation.y += Math.PI / 2));
+  addButton(panel, "Rotate Z", () => currentModel && (currentModel.rotation.z += Math.PI / 2));
   addButton(panel, "Reset Model", () => {
     if (currentModel) {
       currentModel.rotation.set(0, Math.PI, 0);
@@ -131,109 +121,125 @@ function createControlPanel() {
   return panel;
 }
 
+
 function addButton(parent, text, onClick) {
   const button = document.createElement("button");
   button.textContent = text;
-  parent.appendChild(button);
+  button.style.marginBottom = "10px";
+  button.style.padding = "15px";
+  button.style.fontSize = "18px";
+  button.style.border = "none";
+  button.style.borderRadius = "20px";
+  button.style.backgroundColor = "#7249d6";
+  button.style.color = "#fff";
+  button.style.cursor = "pointer";
+  button.style.width = "100%";
   button.addEventListener("click", onClick);
+  parent.appendChild(button);
 }
-
-
-controlsPanel.style.maxHeight = "90vh"; 
-controlsPanel.style.overflowY = "auto";
-
-lightPanel.style.maxHeight = "90vh";
-lightPanel.style.overflowY = "auto";
-
-infoPanel.style.maxHeight = "90vh";
-infoPanel.style.overflowY = "auto";
 
 
 function createLightPanel() {
   const panel = document.createElement("div");
   panel.style.position = "absolute";
-  panel.style.top = "100px";
+  panel.style.top = "280px";
   panel.style.right = "10px";
   panel.style.zIndex = 1000;
   panel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-  panel.style.padding = "10px";
+  panel.style.padding = "20px";
   panel.style.color = "#fff";
-  document.body.appendChild(panel);
+  panel.style.borderRadius = "20px";
 
   const label = document.createElement("div");
-  label.textContent = "Directional Light Intensity";
-  label.style.marginBottom = "5px";
+  label.textContent = "Directional Light";
+  label.style.marginBottom = "10px";
   panel.appendChild(label);
 
   const slider = document.createElement("input");
   slider.type = "range";
   slider.min = "0";
-  slider.max = "100";
+  slider.max = "5";
   slider.value = directionalLight.intensity;
   slider.step = "0.1";
-  panel.appendChild(slider);
-
+  slider.style.width = "100%";
   slider.addEventListener("input", (event) => {
     directionalLight.intensity = parseFloat(event.target.value);
   });
+  panel.appendChild(slider);
 
-  return panel;
+  document.body.appendChild(panel);
 }
+
 
 function createInfoPanel() {
   const panel = document.createElement("div");
   panel.style.position = "absolute";
-  panel.style.top = "170px";
+  panel.style.top = "460px";
   panel.style.right = "10px";
-  panel.style.zIndex = 1000;
   panel.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-  panel.style.padding = "15px";
-  panel.style.color = "#fff";
-  panel.style.fontFamily = "Courier New, monospace";
-  panel.style.fontSize = "14px";
+  panel.style.padding = "20px";
+  panel.style.color = "white";
+  panel.style.borderRadius = "10px";
   panel.style.whiteSpace = "pre-wrap";
-  panel.style.maxWidth = "300px";
-  panel.style.borderRadius = "8px";
-  panel.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)";
-  panel.style.overflow = "auto";
+  panel.style.maxHeight = "70vh";
+  panel.style.overflowY = "auto";
+  panel.style.width = "300px";
   document.body.appendChild(panel);
   return panel;
 }
 
 function updateInfoPanel() {
   if (currentModel) {
-    const modelData = {
-      url: modelUrl || "N/A",
-      position: [
-        currentModel.position.x.toFixed(2),
-        currentModel.position.y.toFixed(2),
-        currentModel.position.z.toFixed(2),
-      ],
-      scale: [
-        currentModel.scale.x.toFixed(2),
-        currentModel.scale.y.toFixed(2),
-        currentModel.scale.z.toFixed(2),
-      ],
-      rotationY: currentModel.rotation.y.toFixed(2),
-      rotationX: currentModel.rotation.x.toFixed(2),
-    };
-
-    infoPanel.textContent = JSON.stringify(modelData, null, 2);
+    infoPanel.textContent = JSON.stringify(
+      {
+        url: modelUrl || "N/A",
+        position: currentModel.position.toArray(),
+        scale: currentModel.scale.toArray(),
+        rotation: currentModel.rotation.toArray(),
+      },
+      null,
+      2,
+    );
   }
 }
 
-function animate() {
-  controls.update();
-  updateInfoPanel();
-  renderer.render(scene, camera);
-  requestAnimationFrame(animate);
+
+const footer = document.createElement("footer");
+footer.style.position = "absolute";
+footer.style.bottom = "0";
+footer.style.width = "100%";
+footer.style.textAlign = "center";
+footer.style.padding = "20px";
+footer.style.cursor = "pointer";
+footer.style.textDecoration = "none";
+footer.textContent = "sudo-3d.vercel.app";
+
+
+function updateFooterTextColor() {
+  const bodyBackgroundColor = window.getComputedStyle(document.body).backgroundColor;
+  const isWhiteBackground = bodyBackgroundColor === "rgb(255, 255, 255)";
+  footer.style.color = isWhiteBackground ? "black" : "white";
+}
+
+footer.addEventListener("click", () => {
+  window.location.href = "https://sudo-3d.vercel.app";
+});
+
+document.body.appendChild(footer);
+
+
+function toggleBackgroundColor() {
+  isBlackBackground = !isBlackBackground;
+  document.body.style.backgroundColor = isBlackBackground ? "black" : "white";
+  renderer.setClearColor(isBlackBackground ? 0x000000 : 0xffffff, 1);
+  updateFooterTextColor();
 }
 
 const toggleBackgroundButton = document.createElement("button");
-toggleBackgroundButton.textContent = "Toggle Background";
+toggleBackgroundButton.textContent = "Background";
 toggleBackgroundButton.style.position = "absolute";
-toggleBackgroundButton.style.top = "40px";
-toggleBackgroundButton.style.left = "20px";
+toggleBackgroundButton.style.top = "385px";
+toggleBackgroundButton.style.right = "10px";
 toggleBackgroundButton.style.zIndex = 1000;
 toggleBackgroundButton.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
 toggleBackgroundButton.style.color = "#fff";
@@ -242,14 +248,24 @@ document.body.appendChild(toggleBackgroundButton);
 
 let isBlackBackground = true;
 toggleBackgroundButton.addEventListener("click", () => {
-  isBlackBackground = !isBlackBackground;
-  document.body.style.backgroundColor = isBlackBackground ? "black" : "white";
-  renderer.setClearColor(isBlackBackground ? 0x000000 : 0xffffff, 1);
-
-  const footer = document.getElementById("footer");
-  footer.style.color = isBlackBackground ? "white" : "black";
+  toggleBackgroundColor();
 });
 
+
+updateFooterTextColor();
+
+
+const controlsPanel = createControlPanel();
+const lightPanel = createLightPanel();
+const infoPanel = createInfoPanel();
+
+
+function animate() {
+  controls.update();
+  updateInfoPanel();
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
 animate();
 
 

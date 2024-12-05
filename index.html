@@ -1,43 +1,96 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>sudo-self 3d viewer</title>
-    <link rel="shortcut icon" href="favicon.ico" />
-    <link
-      rel="icon"
-      type="image/x-icon"
-      sizes="16x16 32x32"
-      href="favicon.ico"
-    />
-    <link rel="apple-touch-icon" sizes="any" href="apple-touch-icon.png" />
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-        background-color: black;
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Viewer</title>
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="icon" type="image/x-icon" sizes="16x16 32x32" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="any" href="apple-touch-icon.png" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+    }
+
+    button, input[type="range"] {
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 12px 15px;
+      background-color: #7249d6;
+      color: white;
+      cursor: pointer;
+      display: block;
+      width: calc(100% - 20px);
+      max-width: 300px;
+      margin: 10px auto;
+    }
+
+    input[type="range"] {
+      width: calc(100% - 20px);
+      max-width: 300px;
+      display: block;
+      margin: 10px auto;
+      accent-color: #7249d6;
+    }
+
+    #footer {
+      text-align: center;
+      font-size: 14px;
+      padding: 10px;
+      background: transparent;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      button, input[type="range"] {
+        font-size: 16px;
+        padding: 10px;
+      }
+
+      div {
+        padding: 10px;
       }
 
       #footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        padding: 10px;
-        font-size: 14px;
-        font-family: Arial, sans-serif;
-        color: white;
-        transition: color 0.3s;
+        font-size: 12px;
       }
-    </style>
-  </head>
-  <body>
-    <script type="module" src="./main.js"></script>
-    <div id="footer">sudo-self 3d viewer</div>
-  </body>
-</html>
+    }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
 
+      a:focus, a:active {
+        text-decoration: none;
+        outline: none;
+      }
+
+      a:visited {
+        color: inherit;
+      }
+      a:hover {
+        transform: scale(2);
+      }
+
+  </style>
+</head>
+<body>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
 
 
 
