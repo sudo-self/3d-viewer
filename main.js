@@ -2,18 +2,12 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000,
-);
 
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-
 
 const loader = new GLTFLoader();
 let currentModel = null;
@@ -35,7 +29,6 @@ loader.load(
   (error) => console.error("Error loading the model:", error),
 );
 
-
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(5, 5, 5);
 scene.add(directionalLight);
@@ -44,7 +37,6 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.50;
 camera.position.z = 5;
-
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -57,8 +49,8 @@ const inputElement = document.createElement("input");
 inputElement.type = "file";
 inputElement.accept = ".glb";
 inputElement.style.position = "absolute";
-inputElement.style.top = "50px";
-inputElement.style.left = "45%";
+inputElement.style.top = "10px";
+inputElement.style.left = "10px";
 inputElement.style.padding = "10px";
 inputElement.style.border = "none";
 inputElement.style.borderRadius = "8px";
@@ -106,6 +98,8 @@ function createControlPanel() {
   panel.style.zIndex = 1000;
   panel.style.padding = "10px";
   panel.style.color = "#fff";
+  panel.style.display = "flex";
+  panel.style.flexDirection = "column";
   document.body.appendChild(panel);
 
   addButton(panel, "Rotate X", () => currentModel && (currentModel.rotation.x += Math.PI / 2));
@@ -120,7 +114,6 @@ function createControlPanel() {
 
   return panel;
 }
-
 
 function addButton(parent, text, onClick) {
   const button = document.createElement("button");
@@ -142,13 +135,13 @@ function addButton(parent, text, onClick) {
 function createLightPanel() {
   const panel = document.createElement("div");
   panel.style.position = "absolute";
-  panel.style.top = "280px";
+  panel.style.top = "320px";
   panel.style.right = "10px";
   panel.style.zIndex = 1000;
   panel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-  panel.style.padding = "20px";
+  panel.style.padding = "10px";
   panel.style.color = "#fff";
-  panel.style.borderRadius = "20px";
+  panel.style.borderRadius = "10px";
 
   const label = document.createElement("div");
   label.textContent = "Directional Light";
@@ -203,7 +196,6 @@ function updateInfoPanel() {
   }
 }
 
-
 const footer = document.createElement("footer");
 footer.style.position = "absolute";
 footer.style.bottom = "0";
@@ -213,7 +205,6 @@ footer.style.padding = "20px";
 footer.style.cursor = "pointer";
 footer.style.textDecoration = "none";
 footer.textContent = "sudo-3d.vercel.app";
-
 
 function updateFooterTextColor() {
   const bodyBackgroundColor = window.getComputedStyle(document.body).backgroundColor;
@@ -238,7 +229,7 @@ function toggleBackgroundColor() {
 const toggleBackgroundButton = document.createElement("button");
 toggleBackgroundButton.textContent = "Background";
 toggleBackgroundButton.style.position = "absolute";
-toggleBackgroundButton.style.top = "385px";
+toggleBackgroundButton.style.top = "395px";
 toggleBackgroundButton.style.right = "10px";
 toggleBackgroundButton.style.zIndex = 1000;
 toggleBackgroundButton.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
@@ -251,9 +242,7 @@ toggleBackgroundButton.addEventListener("click", () => {
   toggleBackgroundColor();
 });
 
-
 updateFooterTextColor();
-
 
 const controlsPanel = createControlPanel();
 const lightPanel = createLightPanel();
@@ -266,6 +255,8 @@ function animate() {
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
+
 animate();
+
 
 
