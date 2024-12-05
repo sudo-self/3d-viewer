@@ -21,13 +21,13 @@ let modelUrl = null;
 let modelFileSize = null;
 
 loader.load(
-  "./assets/max90.glb",
+  "max90.glb",
   function (gltf) {
     currentModel = gltf.scene;
     currentModel.position.set(0, 0, 2);
     currentModel.rotation.y = Math.PI / 2;
     scene.add(currentModel);
-    modelUrl = "./assets/max90.glb";
+    modelUrl = "max90.glb";
     modelFileSize = gltf.scene ? new Blob([gltf]).size : 0;
     updateInfoPanel();
   },
