@@ -34,7 +34,7 @@ scene.add(directionalLight);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 1.0;
+controls.dampingFactor = 0.25;
 camera.position.z = 5;
 
 window.addEventListener("resize", () => {
@@ -138,7 +138,7 @@ function createLightPanel() {
   panel.style.left = "10px";
   panel.style.zIndex = 1000;
   panel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-  panel.style.padding = "10px";
+  panel.style.padding = "20px";
   panel.style.color = "#fff";
   panel.style.borderRadius = "20px";
 
