@@ -142,7 +142,7 @@ function createLightPanel() {
   panel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
   panel.style.padding = "20px";
   panel.style.color = "#fff";
-  panel.style.borderRadius = "20px";
+  panel.style.borderRadius = "10px";
 
   const label = document.createElement("div");
   label.textContent = "Directional Light";
@@ -155,7 +155,7 @@ function createLightPanel() {
   slider.max = "5";
   slider.value = directionalLight.intensity;
   slider.step = "0.1";
-  slider.style.width = "100%";
+  slider.style.width = "90%%";
   slider.addEventListener("input", (event) => {
     directionalLight.intensity = parseFloat(event.target.value);
   });
