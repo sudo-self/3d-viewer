@@ -134,10 +134,20 @@ function createControlPanel() {
 function addButton(parent, text, onClick) {
   const button = document.createElement("button");
   button.textContent = text;
-  button.style.marginBottom = "5px";
   parent.appendChild(button);
   button.addEventListener("click", onClick);
 }
+
+
+controlsPanel.style.maxHeight = "90vh"; 
+controlsPanel.style.overflowY = "auto";
+
+lightPanel.style.maxHeight = "90vh";
+lightPanel.style.overflowY = "auto";
+
+infoPanel.style.maxHeight = "90vh";
+infoPanel.style.overflowY = "auto";
+
 
 function createLightPanel() {
   const panel = document.createElement("div");
@@ -241,3 +251,5 @@ toggleBackgroundButton.addEventListener("click", () => {
 });
 
 animate();
+
+
