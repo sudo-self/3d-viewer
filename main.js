@@ -196,7 +196,7 @@ function toggleBackgroundColor() {
 const toggleBackgroundButton = document.createElement("button");
 toggleBackgroundButton.textContent = "Background";
 toggleBackgroundButton.style.position = "absolute";
-toggleBackgroundButton.style.top = "40px";
+toggleBackgroundButton.style.top = "45px";
 toggleBackgroundButton.style.left = "10px";
 toggleBackgroundButton.style.zIndex = 1000;
 toggleBackgroundButton.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
