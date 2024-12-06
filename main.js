@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { createSky, toggleSkyVisibility } from './sky.js';
 
 const scene = new THREE.Scene();
 
@@ -24,6 +25,9 @@ scene.add(directionalLight);
 const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
 scene.add(ambientLight);
 
+createSky(scene);
+
+
 const loader = new GLTFLoader();
 let currentModel = null;
 const modelUrl = "/max90.glb";
@@ -35,15 +39,15 @@ loader.load(
   (gltf) => {
     currentModel = gltf.scene;
 
-    // Center the model
+   
     centerModel(currentModel);
 
-    // Save the initial state
+  
     initialModelState.position = currentModel.position.clone();
     initialModelState.rotation = currentModel.rotation.clone();
     initialModelState.scale = currentModel.scale.clone();
 
-    // Set the default rotation
+   
     currentModel.rotation.y = Math.PI / 2;
 
     scene.add(currentModel);
@@ -103,10 +107,10 @@ inputElement.addEventListener("change", (event) => {
         (gltf) => {
           currentModel = gltf.scene;
 
-          // Center the model
+     
           centerModel(currentModel);
 
-          // Save the initial state
+        
           initialModelState.position = currentModel.position.clone();
           initialModelState.rotation = currentModel.rotation.clone();
           initialModelState.scale = currentModel.scale.clone();
@@ -149,6 +153,22 @@ function createControlPanel() {
   return panel;
 }
 
+const toggleSkyButton = document.createElement("button");
+toggleSkyButton.textContent = "Toggle Scene";
+toggleSkyButton.style.position = "absolute";
+toggleSkyButton.style.top = "100px";
+toggleSkyButton.style.left = "10px";
+toggleSkyButton.style.zIndex = 1000;
+toggleSkyButton.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+toggleSkyButton.style.color = "#fff";
+toggleSkyButton.style.padding = "10px";
+document.body.appendChild(toggleSkyButton);
+
+toggleSkyButton.addEventListener("click", () => {
+  toggleSkyVisibility();
+});
+
+
 function addButton(parent, text, onClick) {
   const button = document.createElement("button");
   button.textContent = text;
@@ -168,7 +188,7 @@ function addButton(parent, text, onClick) {
 function createLightPanel() {
   const panel = document.createElement("div");
   panel.style.position = "absolute";
-  panel.style.top = "110px";
+  panel.style.top = "170px";
   panel.style.left = "10px";
   panel.style.zIndex = 1000;
   panel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
