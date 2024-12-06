@@ -4,14 +4,18 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 camera.position.set(0, 0, 5);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
-
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(5, 5, 5);
@@ -20,17 +24,28 @@ scene.add(directionalLight);
 const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
 scene.add(ambientLight);
 
-
 const loader = new GLTFLoader();
 let currentModel = null;
 const modelUrl = "/max90.glb";
+
+let initialModelState = { position: null, rotation: null, scale: null };
 
 loader.load(
   modelUrl,
   (gltf) => {
     currentModel = gltf.scene;
-    currentModel.position.set(0, 0, 0);
+
+    // Center the model
+    centerModel(currentModel);
+
+    // Save the initial state
+    initialModelState.position = currentModel.position.clone();
+    initialModelState.rotation = currentModel.rotation.clone();
+    initialModelState.scale = currentModel.scale.clone();
+
+    // Set the default rotation
     currentModel.rotation.y = Math.PI / 2;
+
     scene.add(currentModel);
 
     console.log("Model loaded successfully:", modelUrl);
@@ -38,27 +53,25 @@ loader.load(
   (xhr) => {
     console.log(`Loading model: ${(xhr.loaded / xhr.total) * 100}% complete`);
   },
-  (error) => console.error("Error loading the model:", error),
+  (error) => console.error("Error loading the model:", error)
 );
 
+function centerModel(model) {
+  const box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3());
+  model.position.sub(center);
+}
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.1;
 controls.target.set(0, 0, 0);
 
-
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
-
-
-
-
-
-
 
 const inputElement = document.createElement("input");
 inputElement.type = "file";
@@ -89,22 +102,26 @@ inputElement.addEventListener("change", (event) => {
         url,
         (gltf) => {
           currentModel = gltf.scene;
+
+          // Center the model
+          centerModel(currentModel);
+
+          // Save the initial state
+          initialModelState.position = currentModel.position.clone();
+          initialModelState.rotation = currentModel.rotation.clone();
+          initialModelState.scale = currentModel.scale.clone();
+
           currentModel.position.set(0, 0, 2);
           currentModel.rotation.y = Math.PI;
           scene.add(currentModel);
-          modelUrl = url;
-          modelFileSize = blob.size;
         },
         undefined,
-        (error) => console.error("Error loading the model:", error),
+        (error) => console.error("Error loading the model:", error)
       );
     };
     reader.readAsArrayBuffer(file);
   }
 });
-
-
-
 
 function createControlPanel() {
   const panel = document.createElement("div");
@@ -123,14 +140,14 @@ function createControlPanel() {
   addButton(panel, "Rotate Z", () => currentModel && (currentModel.rotation.z += Math.PI / 2));
   addButton(panel, "Reset Model", () => {
     if (currentModel) {
-      currentModel.rotation.set(0, Math.PI, 0);
-      currentModel.position.set(0, 0, 2);
+      currentModel.position.copy(initialModelState.position);
+      currentModel.rotation.copy(initialModelState.rotation);
+      currentModel.scale.copy(initialModelState.scale);
     }
   });
 
   return panel;
 }
-
 
 function addButton(parent, text, onClick) {
   const button = document.createElement("button");
@@ -147,7 +164,6 @@ function addButton(parent, text, onClick) {
   button.addEventListener("click", onClick);
   parent.appendChild(button);
 }
-
 
 function createLightPanel() {
   const panel = document.createElement("div");
@@ -171,7 +187,7 @@ function createLightPanel() {
   slider.max = "5";
   slider.value = directionalLight.intensity;
   slider.step = "0.1";
-  slider.style.width = "90%%";
+  slider.style.width = "90%";
   slider.addEventListener("input", (event) => {
     directionalLight.intensity = parseFloat(event.target.value);
   });
@@ -179,7 +195,6 @@ function createLightPanel() {
 
   document.body.appendChild(panel);
 }
-
 
 const toggleBackgroundButton = document.createElement("button");
 toggleBackgroundButton.textContent = "Background";
@@ -191,7 +206,6 @@ toggleBackgroundButton.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
 toggleBackgroundButton.style.color = "#fff";
 toggleBackgroundButton.style.padding = "10px";
 document.body.appendChild(toggleBackgroundButton);
-
 
 const footer = document.createElement("footer");
 footer.style.position = "absolute";
@@ -207,13 +221,11 @@ footer.addEventListener("click", () => {
 });
 document.body.appendChild(footer);
 
-
 function updateFooterTextColor() {
   const bodyBackgroundColor = window.getComputedStyle(document.body).backgroundColor;
   const isWhiteBackground = bodyBackgroundColor === "rgb(255, 255, 255)";
   footer.style.color = isWhiteBackground ? "black" : "white";
 }
-
 
 function toggleBackgroundColor() {
   isBlackBackground = !isBlackBackground;
@@ -232,7 +244,6 @@ updateFooterTextColor();
 const controlsPanel = createControlPanel();
 const lightPanel = createLightPanel();
 
-
 function animate() {
   controls.update();
   renderer.render(scene, camera);
@@ -240,6 +251,7 @@ function animate() {
 }
 
 animate();
+
 
 
 
