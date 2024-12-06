@@ -34,8 +34,23 @@ scene.add(directionalLight);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.25;
+controls.dampingFactor = 0.9;
 camera.position.z = 5;
+controls.rotateSpeed = 0.5;
+controls.zoomSpeed = 0.5;
+controls.panSpeed = 0.5;
+controls.minDistance = 1;
+controls.maxDistance = 20;
+
+controls.touches = {
+  ONE: THREE.TOUCH.ROTATE,
+  TWO: THREE.TOUCH.DOLLY_PAN,
+};
+controls.zoomSpeed = 0.7; 
+
+
+
+
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
