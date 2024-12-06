@@ -2,28 +2,28 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-// Initialize scene, camera, and renderer
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 2, 5); // Start with a slightly elevated position
 
-const renderer = new THREE.WebGLRenderer({ antialias: true }); // Enable antialiasing for smoother edges
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 0, 5);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio); // Handle high-DPI screens
+renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
-// Add lighting
+
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(5, 5, 5);
 scene.add(directionalLight);
 
-const ambientLight = new THREE.AmbientLight(0x404040, 0.6); // Subtle ambient light for softer shadows
+const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
 scene.add(ambientLight);
 
-// Load the GLTF model
+
 const loader = new GLTFLoader();
 let currentModel = null;
-const modelUrl = "/max90.glb"; // Define model URL once for reuse
+const modelUrl = "/max90.glb";
 
 loader.load(
   modelUrl,
@@ -33,8 +33,7 @@ loader.load(
     currentModel.rotation.y = Math.PI / 2;
     scene.add(currentModel);
 
- 
-    console.log(`Model loaded: ${modelUrl}`);
+    console.log("Model loaded successfully:", modelUrl);
   },
   (xhr) => {
     console.log(`Loading model: ${(xhr.loaded / xhr.total) * 100}% complete`);
@@ -45,8 +44,8 @@ loader.load(
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.1; 
-controls.target.set(0, 1, 0);
+controls.dampingFactor = 0.1;
+controls.target.set(0, 0, 0);
 
 
 window.addEventListener("resize", () => {
@@ -54,6 +53,8 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+
 
 
 
