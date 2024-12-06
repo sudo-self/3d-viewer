@@ -1,10 +1,11 @@
 import * as THREE from "three";
 
 let skyMesh, sunMesh, groundMesh;
-let isSkyVisible = true;
+let isSkyVisible = false;
+
 
 export function createSky(scene) {
- 
+
   const skyShaderMaterial = new THREE.ShaderMaterial({
     uniforms: {
       topColor: { value: new THREE.Color(0x87ceeb) },
@@ -36,6 +37,7 @@ export function createSky(scene) {
 
   const skyGeometry = new THREE.SphereGeometry(500, 32, 32);
   skyMesh = new THREE.Mesh(skyGeometry, skyShaderMaterial);
+  skyMesh.visible = false;
   scene.add(skyMesh);
 
 
@@ -47,18 +49,19 @@ export function createSky(scene) {
   });
   sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
   sunMesh.position.set(100, 150, -200);
+  sunMesh.visible = false;
   scene.add(sunMesh);
 
-
+ 
   const groundGeometry = new THREE.PlaneGeometry(1000, 1000);
   const groundMaterial = new THREE.MeshLambertMaterial({
     color: 0x228b22,
   });
   groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
-  groundMesh.rotation.x = -Math.PI / 2;
+  groundMesh.rotation.x = -Math.PI / 2; 
   groundMesh.position.y = -50;
+  groundMesh.visible = false;
   scene.add(groundMesh);
-
 
   const sunlight = new THREE.DirectionalLight(0xffd700, 1.0);
   sunlight.position.set(100, 150, -200);
@@ -74,6 +77,7 @@ export function toggleSkyVisibility() {
     groundMesh.visible = isSkyVisible;
   }
 }
+
 
 
 

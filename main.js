@@ -235,7 +235,7 @@ footer.style.textAlign = "center";
 footer.style.padding = "20px";
 footer.style.cursor = "pointer";
 footer.style.textDecoration = "none";
-footer.textContent = "sudo-3d.vercel.app";
+footer.textContent = "Sudo 3d powered by Three.js";
 footer.addEventListener("click", () => {
   window.location.href = "https://sudo-3d.vercel.app";
 });
